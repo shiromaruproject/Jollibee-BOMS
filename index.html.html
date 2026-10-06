@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jollibee Business Operations Management System</title>
+<style>
+  :root{
+    --red:#d71920;
+    --red-dark:#aa0f16;
+    --red-soft:#fff0f1;
+    --cream:#fffaf5;
+    --bg:#f5f7fa;
+    --white:#ffffff;
+    --ink:#17243a;
+    --muted:#667085;
+    --line:#e4e8ef;
+    --green:#16935a;
+    --green-soft:#e9f8f0;
+    --yellow:#e9a000;
+    --yellow-soft:#fff6dd;
+    --blue:#2c73d2;
+    --blue-soft:#eaf3ff;
+    --purple:#7856d8;
+    --purple-soft:#f1edff;
+    --shadow:0 10px 28px rgba(23,36,58,.07);
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}
+  button,input,select,textarea{font:inherit}
+  button{cursor:pointer}
+  .app{display:flex;min-height:100vh}
+  .sidebar{
+    width:258px;background:linear-gradient(180deg,#c90f18 0%,#990b12 100%);
+    color:#fff;padding:20px 14px 16px;position:fixed;top:0;left:0;bottom:0;z-index:10;overflow:auto
+  }
+  .brand{display:flex;align-items:center;gap:11px;padding:2px 10px 24px}
+  .brand-word{font-size:29px;font-weight:900;letter-spacing:-1.5px}
+  .brand-bee{
+    width:44px;height:44px;border-radius:50%;background:#fff;color:var(--red);display:grid;place-items:center;
+    box-shadow:0 5px 15px rgba(0,0,0,.12);font-size:25px
+  }
+  .system-name{font-size:12px;opacity:.88;line-height:1.35;padding:0 10px 16px}
+  .nav-section{margin-top:8px}
+  .nav-btn{
+    width:100%;border:0;background:transparent;color:#fff;padding:12px 12px;border-radius:10px;
+    display:flex;align-items:center;gap:12px;text-align:left;font-size:14px;margin:3px 0;opacity:.95
+  }
+  .nav-btn:hover{background:rgba(255,255,255,.12)}
+  .nav-btn.active{background:#fff;color:var(--red);font-weight:800;box-shadow:0 6px 14px rgba(0,0,0,.12)}
+  .nav-icon{width:20px;text-align:center;font-size:16px}
+  .nav-spacer{border-top:1px solid rgba(255,255,255,.25);margin:16px 10px 10px}
+  .main{margin-left:258px;min-width:0;flex:1}
+  .topbar{
+    height:72px;background:var(--white);border-bottom:1px solid var(--line);display:flex;align-items:center;
+    padding:0 28px;justify-content:space-between;position:sticky;top:0;z-index:8
+  }
+  .topbar-left{display:flex;align-items:center;gap:16px}
+  .page-brand{font-size:17px;font-weight:800}
+  .pill{background:#f3f4f6;color:#344054;border-radius:99px;padding:7px 11px;font-size:12px;font-weight:700}
+  .topbar-right{display:flex;align-items:center;gap:18px}
+  .branch{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700}
+  .avatar{width:35px;height:35px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-weight:800}
+  .user-mini{display:flex;align-items:center;gap:9px}
+  .user-mini small{display:block;color:var(--muted);font-size:10px;margin-top:1px}
+  .content{padding:28px;max-width:1600px;margin:0 auto}
+  .page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:20px}
+  .page-head h1{margin:0 0 5px;font-size:27px;letter-spacing:-.5px}
+  .page-head p{margin:0;color:var(--muted);font-size:13px}
+  .actions{display:flex;gap:9px;flex-wrap:wrap}
+  .btn{
+    border:1px solid var(--line);background:#fff;color:var(--ink);padding:10px 14px;border-radius:9px;font-weight:800;font-size:13px
+  }
+  .btn:hover{border-color:#c8cfd9}
+  .btn-primary{background:var(--red);border-color:var(--red);color:#fff}
+  .btn-primary:hover{background:var(--red-dark)}
+  .btn-success{background:var(--green);border-color:var(--green);color:#fff}
+  .btn-danger{background:#c92a34;border-color:#c92a34;color:#fff}
+  .btn-ghost{background:transparent}
+  .grid{display:grid;gap:16px}
+  .kpi-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .card{
+    background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)
+  }
+  .card.pad{padding:18px}
+  .kpi{padding:17px}
+  .kpi-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+  .kpi-title{color:var(--muted);font-size:12px;font-weight:700}
+  .kpi-value{font-size:25px;font-weight:900;margin:8px 0 5px}
+  .kpi-foot{font-size:11px;font-weight:700}
+  .icon-box{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:18px}
+  .soft-red{background:var(--red-soft);color:var(--red)}
+  .soft-yellow{background:var(--yellow-soft);color:var(--yellow)}
+  .soft-green{background:var(--green-soft);color:var(--green)}
+  .soft-blue{background:var(--blue-soft);color:var(--blue)}
+  .soft-purple{background:var(--purple-soft);color:var(--purple)}
+  .up{color:var(--green)} .down{color:var(--red)}
+  .dashboard-main{grid-template-columns:1.35fr 1fr}
+  .dashboard-lower{grid-template-columns:1fr 1fr 1.05fr}
+  .card-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}
+  .card-head h3{margin:0;font-size:15px}
+  .card-body{padding:18px}
+  .muted{color:var(--muted)}
+  .activity{display:flex;gap:11px;padding:12px 0;border-bottom:1px solid #edf0f4}
+  .activity:last-child{border-bottom:0}
+  .activity .time{margin-left:auto;white-space:nowrap;font-size:10px;color:var(--muted)}
+  .activity b{display:block;font-size:12px}
+  .activity span{display:block;font-size:10px;color:var(--muted);margin-top:3px}
+  .trend{height:245px;display:flex;align-items:flex-end;gap:12px;padding:16px 8px 10px;border-bottom:1px solid var(--line)}
+  .bar-wrap{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:7px}
+  .bar{width:100%;max-width:42px;border-radius:7px 7px 0 0;background:linear-gradient(180deg,#ed2e35,#d71920)}
+  .bar-label{font-size:10px;color:var(--muted)}
+  .mini-list{display:grid;gap:11px}
+  .product-row{display:grid;grid-template-columns:36px 1fr auto;align-items:center;gap:9px}
+  .food{
+    width:36px;height:36px;border-radius:10px;background:var(--cream);display:grid;place-items:center;font-size:21px;border:1px solid #f0e9df
+  }
+  .product-row b{font-size:12px}.product-row small{display:block;color:var(--muted);font-size:10px;margin-top:2px}
+  .stock-row{display:flex;align-items:center;gap:10px;padding:7px 0}
+  .dot{width:9px;height:9px;border-radius:50%}
+  .dot.green{background:var(--green)} .dot.yellow{background:var(--yellow)} .dot.red{background:var(--red)} .dot.blue{background:var(--blue)}
+  .quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .quick{border:1px solid var(--line);border-radius:10px;padding:11px;background:#fff;text-align:left}
+  .quick b{display:block;font-size:12px}.quick span{font-size:10px;color:var(--muted)}
+  .toolbar{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:9px;margin-bottom:14px}
+  .input,.select,.textarea{
+    width:100%;border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 12px;outline:0;color:var(--ink);font-size:12px
+  }
+  .input:focus,.select:focus,.textarea:focus{border-color:#d7a2a5;box-shadow:0 0 0 3px rgba(215,25,32,.07)}
+  .table-wrap{overflow:auto}
+  table{width:100%;border-collapse:collapse;min-width:800px}
+  th,td{padding:12px 12px;text-align:left;border-bottom:1px solid #edf0f4;font-size:12px;white-space:nowrap}
+  th{font-size:11px;color:#60708a;background:#fbfcfd;font-weight:800}
+  td.num,th.num{text-align:right}
+  tr:hover td{background:#fcfcfd}
+  .status{
+    display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;font-size:10px;font-weight:800
+  }
+  .status.pending{background:var(--yellow-soft);color:#9b6800}.status.paid,.status.approved,.status.delivered,.status.completed,.status.instock{background:var(--green-soft);color:#117347}
+  .status.low{background:#fff4df;color:#a96c00}.status.out{background:#ffeaec;color:#a3141b}
+  .status.draft{background:#f2f4f7;color:#667085}
+  .section-gap{margin-top:16px}
+  .form-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+  .field label{display:block;font-size:11px;font-weight:800;margin:0 0 6px;color:#344054}
+  .field.full{grid-column:1/-1}
+  .items-table{min-width:900px}
+  .summary{display:flex;justify-content:flex-end}
+  .summary-box{width:360px;border-top:1px solid var(--line);padding-top:12px}
+  .sum-row{display:flex;justify-content:space-between;padding:5px 0;font-size:12px}
+  .sum-row.total{font-size:16px;font-weight:900;border-top:1px solid var(--line);margin-top:6px;padding-top:10px}
+  .pos-grid{display:grid;grid-template-columns:1.65fr 1fr;gap:16px}
+  .tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:13px}
+  .tab{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;font-size:11px;font-weight:800}
+  .tab.active{background:var(--red);border-color:var(--red);color:#fff}
+  .menu-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .menu-card{border:1px solid var(--line);border-radius:13px;padding:11px;background:#fff}
+  .food-lg{height:105px;border-radius:10px;background:var(--cream);display:grid;place-items:center;font-size:56px;border:1px solid #f0e9df}
+  .menu-card h4{margin:9px 0 2px;font-size:13px}.menu-card p{margin:0 0 10px;color:var(--muted);font-size:10px}
+  .menu-foot{display:flex;align-items:center;justify-content:space-between}.price{font-weight:900;font-size:14px}
+  .add{border:0;background:var(--red);color:#fff;border-radius:8px;padding:7px 10px;font-size:11px;font-weight:900}
+  .order-card{position:sticky;top:88px}
+  .order-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+  .meta-box{background:#fafbfc;border:1px solid var(--line);border-radius:9px;padding:9px}.meta-box small{display:block;color:var(--muted);font-size:9px}.meta-box b{font-size:11px}
+  .order-line{display:grid;grid-template-columns:1fr 30px 75px 70px;gap:5px;align-items:center;border-bottom:1px solid #edf0f4;padding:9px 0;font-size:11px}
+  .order-line .right{text-align:right}.qty{display:flex;gap:4px;align-items:center}.qty button{width:22px;height:22px;border:1px solid var(--line);border-radius:6px;background:#fff}
+  .delete{border:0;background:transparent;color:#a4acb8;font-size:14px}
+  .checkout-btn{width:100%;margin-top:12px;padding:13px;border:0;background:var(--red);color:#fff;border-radius:10px;font-weight:900}
+  .pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .payment-methods{display:grid;gap:8px}
+  .pay-option{display:flex;align-items:center;gap:9px;border:1px solid var(--line);padding:11px;border-radius:9px;font-size:12px;font-weight:800}
+  .pay-option.active{border-color:var(--red);background:var(--red-soft);color:var(--red)}
+  .pay-option input{accent-color:var(--red)}
+  .receipt{border:1px dashed #d0d6df;border-radius:11px;padding:14px;background:#fcfcfd}
+  .receipt-status{display:flex;align-items:center;gap:10px;border:1px solid #bde8cf;background:var(--green-soft);padding:11px;border-radius:9px;color:#117347;margin-top:12px}
+  .receipt-status .check{width:30px;height:30px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center}
+  .inventory-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .two-col{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+  .alert{display:flex;gap:10px;align-items:flex-start;padding:11px;border:1px solid #f2deb2;background:#fffaf0;border-radius:9px;margin-bottom:9px}
+  .alert b{font-size:12px;display:block}.alert span{font-size:10px;color:var(--muted)}
+  .empty{text-align:center;color:var(--muted);padding:30px}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;padding:18px;z-index:30}
+  .modal-backdrop.show{display:flex}
+  .modal{background:#fff;border-radius:16px;max-width:760px;width:100%;box-shadow:0 25px 70px rgba(0,0,0,.2);max-height:92vh;overflow:auto}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;padding:18px;border-bottom:1px solid var(--line)}
+  .modal-head h3{margin:0;font-size:16px}.close{border:0;background:transparent;font-size:20px;color:var(--muted)}
+  .modal-body{padding:18px}.modal-foot{padding:14px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+  .toast{position:fixed;right:22px;bottom:22px;background:#17243a;color:#fff;padding:12px 16px;border-radius:9px;font-size:12px;font-weight:800;box-shadow:var(--shadow);opacity:0;transform:translateY(10px);pointer-events:none;transition:.2s;z-index:50}
+  .toast.show{opacity:1;transform:translateY(0)}
+  .small-note{font-size:10px;color:var(--muted)}
+  .footer-note{margin-top:20px;font-size:10px;color:#8a94a6;text-align:center}
+  @media (max-width:1200px){
+    .kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .dashboard-lower{grid-template-columns:1fr 1fr}
+    .dashboard-lower > :last-child{grid-column:1/-1}
+    .toolbar{grid-template-columns:1fr 1fr}
+    .menu-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media (max-width:900px){
+    .sidebar{width:84px}.brand-word,.system-name,.nav-btn span:not(.nav-icon){display:none}.brand{justify-content:center;padding-inline:0}
+    .nav-btn{justify-content:center}.main{margin-left:84px}
+    .dashboard-main,.pos-grid,.pay-grid,.two-col{grid-template-columns:1fr}
+    .order-card{position:static}
+    .form-grid{grid-template-columns:1fr 1fr}
+    .inventory-kpis{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:640px){
+    .topbar{padding:0 14px}.branch,.user-mini > div{display:none}.content{padding:16px}
+    .kpi-grid,.inventory-kpis,.dashboard-lower{grid-template-columns:1fr}
+    .toolbar,.form-grid{grid-template-columns:1fr}
+    .menu-grid{grid-template-columns:1fr}
+    .page-head{flex-direction:column}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-word">Jollibee</div>
+      <div class="brand-bee">🐝</div>
+    </div>
+    <div class="system-name">Business Operations Management System</div>
+
+    <div class="nav-section">
+      <button class="nav-btn active" data-page="dashboard"><span class="nav-icon">⌂</span><span>Dashboard</span></button>
+      <button class="nav-btn" data-page="ordering"><span class="nav-icon">🛒</span><span>Ordering to Supplier</span></button>
+      <button class="nav-btn" data-page="supplier-payment"><span class="nav-icon">▣</span><span>Payment to Supplier</span></button>
+      <button class="nav-btn" data-page="sales"><span class="nav-icon">🍔</span><span>Sales from Customer</span></button>
+      <button class="nav-btn" data-page="customer-payment"><span class="nav-icon">💳</span><span>Payment from Customer</span></button>
+      <button class="nav-btn" data-page="inventory"><span class="nav-icon">▧</span><span>Inventory</span></button>
+    </div>
+    <div class="nav-spacer"></div>
+    <div class="nav-section">
+      <button class="nav-btn" data-page="reports"><span class="nav-icon">▥</span><span>Reports</span></button>
+      <button class="nav-btn" data-page="settings"><span class="nav-icon">⚙</span><span>Settings</span></button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="page-brand">Business Operations Management System</div>
+        <span class="pill">Lipa Branch</span>
+      </div>
+      <div class="topbar-right">
+        <div class="branch">🔔 <span id="notificationText">3 notifications</span></div>
+        <div class="user-mini">
+          <div class="avatar">JC</div>
+          <div><strong style="font-size:12px">Juan Dela Cruz</strong><small>Branch Admin</small></div>
+        </div>
+      </div>
+    </header>
+
+    <section id="page" class="content"></section>
+  </main>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modalTitle">Modal</h3>
+      <button class="close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot" id="modalFoot"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const state = {
+  page: "dashboard",
+  cart: [
+    {id:1,name:"1-pc Chickenjoy Meal",qty:2,price:95,emoji:"🍗"},
+    {id:2,name:"Jolly Spaghetti",qty:1,price:60,emoji:"🍝"},
+    {id:3,name:"Coke Regular",qty:2,price:45,emoji:"🥤"}
+  ],
+  supplierOrders: [
+    {po:"PO-20261027-01",date:"Oct 27, 2026",supplier:"San Miguel Foods, Inc.",amount:31750,status:"Pending"},
+    {po:"PO-20261024-02",date:"Oct 24, 2026",supplier:"Monde Nissin (Buns)",amount:12400,status:"Approved"},
+    {po:"PO-20261020-03",date:"Oct 20, 2026",supplier:"Coca-Cola FEMSA",amount:8950,status:"Delivered"},
+    {po:"PO-20261018-04",date:"Oct 18, 2026",supplier:"Nestlé Philippines",amount:15200,status:"Delivered"}
+  ],
+  supplierInvoices: [
+    {inv:"INV-20261027-01",po:"PO-20261027-01",supplier:"San Miguel Foods, Inc.",date:"Oct 27, 2026",due:"Nov 10, 2026",amount:31750,status:"Outstanding"},
+    {inv:"INV-20261024-02",po:"PO-20261024-02",supplier:"Monde Nissin (Buns)",date:"Oct 24, 2026",due:"Nov 08, 2026",amount:12400,status:"Paid"},
+    {inv:"INV-20261020-03",po:"PO-20261020-03",supplier:"Coca-Cola FEMSA",date:"Oct 20, 2026",due:"Nov 03, 2026",amount:8950,status:"Paid"}
+  ],
+  inventory: [
+    {item:"Chicken",cat:"Ingredient",stock:150,unit:"kg",reorder:50,status:"In Stock"},
+    {item:"Cooking Oil",cat:"Ingredient",stock:35,unit:"L",reorder:40,status:"Low Stock"},
+    {item:"Burger Buns",cat:"Ingredient",stock:300,unit:"pcs",reorder:100,status:"In Stock"},
+    {item:"Paper Cups",cat:"Packaging",stock:1500,unit:"pcs",reorder:500,status:"In Stock"},
+    {item:"Soft Drinks",cat:"Beverage",stock:80,unit:"pcs",reorder:100,status:"Low Stock"},
+    {item:"French Fries",cat:"Ingredient",stock:25,unit:"kg",reorder:30,status:"Low Stock"},
+    {item:"Tomato Sauce",cat:"Ingredient",stock:60,unit:"kg",reorder:20,status:"In Stock"}
+  ],
+  payments: [
+    {time:"Oct 27, 2026 2:15 PM",order:"SO-20261027-045",type:"Dine-in",method:"Cash",amount:2350,status:"Paid"},
+    {time:"Oct 27, 2026 1:12 PM",order:"SO-20261027-044",type:"Takeout",method:"GCash",amount:620,status:"Paid"},
+    {time:"Oct 27, 2026 12:40 PM",order:"SO-20261027-043",type:"Delivery",method:"Card",amount:890,status:"Paid"}
+  ],
+  sales: [
+    {so:"SO-20261027-045",time:"Oct 27, 2026 2:15 PM",type:"Dine-in",amount:2350,status:"Completed"},
+    {so:"SO-20261027-044",time:"Oct 27, 2026 1:12 PM",type:"Takeout",amount:620,status:"Completed"},
+    {so:"SO-20261027-043",time:"Oct 27, 2026 12:40 PM",type:"Delivery",amount:890,status:"Completed"}
+  ]
+};
+
+const menu = [
+  {id:101,name:"1-pc Chickenjoy Meal",category:"Chickenjoy",price:95,emoji:"🍗",desc:"1 pc Chickenjoy + rice + drink"},
+  {id:102,name:"2-pc Chickenjoy Meal",category:"Chickenjoy",price:170,emoji:"🍗",desc:"2 pcs Chickenjoy + rice"},
+  {id:103,name:"Chickenjoy Bucket",category:"Chickenjoy",price:499,emoji:"🍗",desc:"6 pcs Chickenjoy"},
+  {id:104,name:"Yumburger",category:"Burgers",price:45,emoji:"🍔",desc:"Classic Jollibee Yumburger"},
+  {id:105,name:"Cheesy Yumburger",category:"Burgers",price:55,emoji:"🍔",desc:"Yumburger with cheese"},
+  {id:106,name:"Jolly Spaghetti",category:"Spaghetti",price:60,emoji:"🍝",desc:"Sweet-style Filipino spaghetti"},
+  {id:107,name:"Coke Regular",category:"Drinks",price:45,emoji:"🥤",desc:"Regular soft drink"},
+  {id:108,name:"Peach Mango Pie",category:"Desserts",price:45,emoji:"🥭",desc:"Crispy peach mango pie"},
+  {id:109,name:"Jolly Crispy Fries",category:"Sides",price:60,emoji:"🍟",desc:"Crispy seasoned fries"}
+];
+
+let currentCategory = "All";
+
+function peso(n){ return "₱" + Number(n).toLocaleString("en-PH",{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function statusClass(s){
+  const x=s.toLowerCase().replace(/\s/g,"");
+  if(x.includes("low")) return "low"; if(x.includes("out")) return "out"; if(x==="draft") return "draft"; 
+  if(x.includes("paid")||x.includes("approved")||x.includes("delivered")||x.includes("completed")||x.includes("instock")) return "paid";
+  return "pending";
+}
+function showToast(msg){
+  const el=document.getElementById("toast"); el.textContent=msg; el.classList.add("show");
+  clearTimeout(window._toastTimer); window._toastTimer=setTimeout(()=>el.classList.remove("show"),2200);
+}
+function setPage(page){
+  state.page=page;
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+  render();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll(".nav-btn").forEach(btn=>btn.addEventListener("click",()=>setPage(btn.dataset.page)));
+
+function render(){
+  const pages={
+    dashboard:renderDashboard,
+    ordering:renderOrdering,
+    "supplier-payment":renderSupplierPayment,
+    sales:renderSales,
+    "customer-payment":renderCustomerPayment,
+    inventory:renderInventory,
+    reports:renderReports,
+    settings:renderSettings
+  };
+  document.getElementById("page").innerHTML = (pages[state.page]||renderDashboard)();
+  bindPageEvents();
+}
+
+function renderDashboard(){
+  return `
+    <div class="page-head">
+      <div>
+        <h1>Good morning, Juan Dela Cruz!</h1>
+        <p>Here's what's happening in your branch today. &nbsp; • &nbsp; October 27, 2026 &nbsp; • &nbsp; Lipa Branch</p>
+      </div>
+      <div class="actions">
+        <button class="btn" onclick="showToast('Dashboard date range is set to today')">📅 Today</button>
+      </div>
+    </div>
+
+    <div class="grid kpi-grid">
+      ${kpi("🚚","soft-red","Pending Supplier Orders","3","View orders","ordering")}
+      ${kpi("🧾","soft-yellow","Unpaid Supplier Invoices",peso(125000),"View invoices","supplier-payment")}
+      ${kpi("📈","soft-green","Today's Sales",peso(285450),"View sales","sales")}
+      ${kpi("💳","soft-blue","Customer Payments",peso(279800),"View payments","customer-payment")}
+      ${kpi("📦","soft-purple","Low Stock Items","12","View inventory","inventory")}
+    </div>
+
+    <div class="grid dashboard-main section-gap">
+      <div class="card">
+        <div class="card-head"><h3>Sales Overview</h3><span class="pill">Oct 21–27, 2026</span></div>
+        <div class="card-body">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <span class="muted" style="font-size:11px">Daily sales</span>
+            <b style="font-size:18px">${peso(285450)}</b>
+          </div>
+          <div class="trend">
+            ${[24,48,43,68,58,82,100].map((v,i)=>`<div class="bar-wrap"><div class="bar" style="height:${v}%"></div><div class="bar-label">${["21","22","23","24","25","26","27"][i]}</div></div>`).join("")}
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:9px;font-size:10px;color:var(--muted)"><span>Weekly trend</span><span class="up">▲ 8% vs. previous week</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>Recent Activities</h3><button class="btn btn-ghost" onclick="setPage('reports')">View all →</button></div>
+        <div class="card-body">
+          ${activity("🛒","soft-red","Purchase Order #PO-20261027-01","Submitted to San Miguel Foods, Inc.","2h ago")}
+          ${activity("💳","soft-blue","Supplier Payment #SP-20261026-03","Payment released to supplier","5h ago")}
+          ${activity("🍔","soft-yellow","Sales Transaction #SO-20261027-045",peso(2350)+" • Dine-in","6h ago")}
+          ${activity("📦","soft-green","Stock Received #SR-20261026-02","Chicken, 200kg • San Miguel Foods, Inc.","8h ago")}
+        </div>
+      </div>
+    </div>
+
+    <div class="grid dashboard-lower section-gap">
+      <div class="card"><div class="card-head"><h3>Top Selling Items</h3><button class="btn btn-ghost" onclick="setPage('reports')">View report →</button></div><div class="card-body mini-list">
+        ${[
+          ["🍗","Chickenjoy Meal",peso(85420),"28%"],
+          ["🍝","Jolly Spaghetti",peso(62350),"21%"],
+          ["🍔","Yumburger",peso(48210),"16%"],
+          ["🍟","Jolly Fries",peso(32680),"11%"],
+          ["🥭","Peach Mango Pie",peso(21340),"7%"]
+        ].map(x=>`<div class="product-row"><div class="food">${x[0]}</div><div><b>${x[1]}</b><small>${x[3]} of sales</small></div><strong style="font-size:11px">${x[2]}</strong></div>`).join("")}
+      </div></div>
+
+      <div class="card"><div class="card-head"><h3>Inventory Status</h3><button class="btn btn-ghost" onclick="setPage('inventory')">View all →</button></div><div class="card-body">
+        <div style="display:flex;align-items:center;gap:18px">
+          <div style="width:150px;height:150px;border-radius:50%;background:conic-gradient(#20a865 0 82%, #f1ad13 82% 92%, #d71920 92% 100%);display:grid;place-items:center;flex:none">
+            <div style="width:95px;height:95px;border-radius:50%;background:#fff;display:grid;place-items:center;text-align:center"><div><b style="font-size:21px">125</b><small class="muted" style="display:block;font-size:9px">Total items</small></div></div>
+          </div>
+          <div style="flex:1">
+            <div class="stock-row"><span class="dot green"></span><span style="font-size:11px">In Stock</span><strong style="margin-left:auto">103</strong></div>
+            <div class="stock-row"><span class="dot yellow"></span><span style="font-size:11px">Low Stock</span><strong style="margin-left:auto">12</strong></div>
+            <div class="stock-row"><span class="dot red"></span><span style="font-size:11px">Out of Stock</span><strong style="margin-left:auto">3</strong></div>
+            <div class="stock-row"><span class="dot blue"></span><span style="font-size:11px">Pending Delivery</span><strong style="margin-left:auto">5</strong></div>
+          </div>
+        </div>
+        <div class="alert" style="margin-top:15px"><div>⚠️</div><div><b>12 items are running low on stock.</b><span>Check inventory or create a purchase order.</span></div></div>
+      </div></div>
+
+      <div class="card"><div class="card-head"><h3>Quick Actions</h3></div><div class="card-body"><div class="quick-grid">
+        ${quick("🚚","Create Purchase Order","ordering")}
+        ${quick("💳","Record Supplier Payment","supplier-payment")}
+        ${quick("🍔","Create Sales Order","sales")}
+        ${quick("🧾","Record Customer Payment","customer-payment")}
+        ${quick("📦","View Inventory","inventory")}
+        ${quick("📊","View Reports","reports")}
+      </div></div></div>
+    </div>
+    <div class="footer-note">JBOMS prototype • Designed for academic demonstration and workflow simulation</div>
+  `;
+}
+function kpi(icon,cls,title,value,foot,page){ return `<div class="card kpi"><div class="kpi-top"><div><div class="kpi-title">${title}</div><div class="kpi-value">${value}</div><div class="kpi-foot" style="color:var(--red);cursor:pointer" onclick="setPage('${page}')">${foot} →</div></div><div class="icon-box ${cls}">${icon}</div></div></div>`}
+function activity(icon,cls,title,sub,time){return `<div class="activity"><div class="icon-box ${cls}" style="width:34px;height:34px;font-size:15px">${icon}</div><div><b>${title}</b><span>${sub}</span></div><span class="time">${time}</span></div>`}
+function quick(icon,title,page){return `<button class="quick" onclick="setPage('${page}')"><b>${icon} &nbsp; ${title}</b><span>Open module →</span></button>`}
+
+function renderOrdering(){
+  return `
+    <div class="page-head">
+      <div><h1>Ordering to Supplier</h1><p>Create and manage purchase orders for supplies, ingredients, and other items needed by the branch.</p></div>
+      <div class="actions"><button class="btn btn-primary" onclick="openPurchaseModal()">＋ New Purchase Order</button></div>
+    </div>
+    <div class="card pad">
+      <div class="toolbar">
+        <input class="input" id="orderSearch" placeholder="Search PO number or supplier...">
+        <select class="select"><option>All Suppliers</option><option>San Miguel Foods, Inc.</option><option>Monde Nissin (Buns)</option><option>Coca-Cola FEMSA</option></select>
+        <select class="select"><option>All Status</option><option>Pending</option><option>Approved</option><option>Delivered</option></select>
+        <input class="input" value="Oct 1, 2026 – Oct 31, 2026">
+      </div>
+      <div class="table-wrap">
+        <table id="ordersTable"><thead><tr><th>PO Number</th><th>Date</th><th>Supplier</th><th class="num">Total Amount</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>${state.supplierOrders.map(o=>`
+          <tr><td><b>${o.po}</b></td><td>${o.date}</td><td>${o.supplier}</td><td class="num">${peso(o.amount)}</td><td><span class="status ${statusClass(o.status)}">${o.status}</span></td><td><button class="btn" onclick="viewOrder('${o.po}')">View</button> <button class="btn" onclick="showToast('More actions opened for ${o.po}')">⋮</button></td></tr>
+        `).join("")}</tbody></table>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px"><span class="small-note">Showing 1–${state.supplierOrders.length} purchase orders</span><span class="small-note">‹ &nbsp; <b>1</b> &nbsp; 2 &nbsp; 3 &nbsp; ›</span></div>
+    </div>
+  `;
+}
+
+function openPurchaseModal(){
+  document.getElementById("modalTitle").textContent="Create Purchase Order";
+  document.getElementById("modalBody").innerHTML=`
+    <div class="form-grid">
+      <div class="field"><label>PO Number</label><input class="input" value="PO-20261027-${String(state.supplierOrders.length+1).padStart(2,"0")}"></div>
+      <div class="field"><label>Supplier</label><select class="select"><option>San Miguel Foods, Inc.</option><option>Monde Nissin (Buns)</option><option>Coca-Cola FEMSA</option><option>Nestlé Philippines</option></select></div>
+      <div class="field"><label>Order Date</label><input class="input" value="Oct 27, 2026"></div>
+      <div class="field"><label>Expected Delivery</label><input class="input" value="Oct 31, 2026"></div>
+      <div class="field full"><label>Notes</label><textarea class="textarea" rows="3">Regular supply order for branch operations. Please ensure fresh and quality goods.</textarea></div>
+      <div class="field full"><label>Items</label>
+        <div class="table-wrap"><table><thead><tr><th>Item</th><th>Qty</th><th>Unit</th><th class="num">Unit Price</th><th class="num">Total</th></tr></thead>
+        <tbody>
+          <tr><td>Chicken</td><td>100</td><td>kg</td><td class="num">₱180.00</td><td class="num">₱18,000.00</td></tr>
+          <tr><td>Cooking Oil</td><td>50</td><td>L</td><td class="num">₱95.00</td><td class="num">₱4,750.00</td></tr>
+          <tr><td>Burger Buns</td><td>500</td><td>pcs</td><td class="num">₱12.00</td><td class="num">₱6,000.00</td></tr>
+          <tr><td>Paper Cups</td><td>1,000</td><td>pcs</td><td class="num">₱3.00</td><td class="num">₱3,000.00</td></tr>
+        </tbody></table></div>
+      </div>
+      <div class="field full"><label>Additional Instructions</label><input class="input" placeholder="e.g. Deliver before 9 AM, contact supplier upon arrival, etc."></div>
+    </div>`;
+  document.getElementById("modalFoot").innerHTML=`<button class="btn" onclick="closeModal()">Save Draft</button><button class="btn btn-primary" onclick="submitPurchase()">Submit Purchase Order</button>`;
+  document.getElementById("modalBackdrop").classList.add("show");
+}
+function submitPurchase(){
+  const po="PO-20261027-"+String(state.supplierOrders.length+1).padStart(2,"0");
+  state.supplierOrders.unshift({po,date:"Oct 27, 2026",supplier:"San Miguel Foods, Inc.",amount:31750,status:"Pending"});
+  closeModal(); showToast("Purchase order submitted successfully."); render();
+}
+function viewOrder(po){
+  const o=state.supplierOrders.find(x=>x.po===po);
+  document.getElementById("modalTitle").textContent="Purchase Order Details";
+  document.getElementById("modalBody").innerHTML=`
+    <div class="form-grid">
+      <div class="field"><label>PO Number</label><div class="input" style="background:#fafbfc">${o.po}</div></div>
+      <div class="field"><label>Supplier</label><div class="input" style="background:#fafbfc">${o.supplier}</div></div>
+      <div class="field"><label>Date</label><div class="input" style="background:#fafbfc">${o.date}</div></div>
+      <div class="field"><label>Status</label><div style="padding-top:9px"><span class="status ${statusClass(o.status)}">${o.status}</span></div></div>
+    </div>
+    <div class="section-gap"><div class="table-wrap"><table><thead><tr><th>Item</th><th>Quantity</th><th>Unit</th><th class="num">Unit Price</th><th class="num">Total</th></tr></thead>
+    <tbody>
+      <tr><td>Chicken</td><td>100</td><td>kg</td><td class="num">₱180.00</td><td class="num">₱18,000.00</td></tr>
+      <tr><td>Cooking Oil</td><td>50</td><td>L</td><td class="num">₱95.00</td><td class="num">₱4,750.00</td></tr>
+      <tr><td>Burger Buns</td><td>500</td><td>pcs</td><td class="num">₱12.00</td><td class="num">₱6,000.00</td></tr>
+      <tr><td>Paper Cups</td><td>1,000</td><td>pcs</td><td class="num">₱3.00</td><td class="num">₱3,000.00</td></tr>
+    </tbody></table></div></div>
+    <div class="summary section-gap"><div class="summary-box"><div class="sum-row"><span>Subtotal</span><b>${peso(o.amount)}</b></div><div class="sum-row total"><span>Total</span><b>${peso(o.amount)}</b></div></div></div>`;
+  document.getElementById("modalFoot").innerHTML=`<button class="btn" onclick="closeModal()">Close</button><button class="btn btn-primary" onclick="showToast('Purchase order saved')">Save Changes</button>`;
+  document.getElementById("modalBackdrop").classList.add("show");
+}
+
+function renderSupplierPayment(){
+  return `
+    <div class="page-head"><div><h1>Payment to Supplier</h1><p>Review supplier invoices and record payments made to approved suppliers.</p></div></div>
+    <div class="card pad">
+      <div class="toolbar">
+        <select class="select"><option>All Invoices</option><option>Outstanding</option><option>Paid</option></select>
+        <select class="select"><option>All Suppliers</option><option>San Miguel Foods, Inc.</option><option>Monde Nissin (Buns)</option></select>
+        <input class="input" value="Oct 1, 2026 – Oct 31, 2026">
+        <input class="input" placeholder="Search invoice number...">
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Invoice No.</th><th>PO No.</th><th>Supplier</th><th>Invoice Date</th><th>Due Date</th><th class="num">Amount</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>${state.supplierInvoices.map(i=>`
+          <tr><td><b>${i.inv}</b></td><td>${i.po}</td><td>${i.supplier}</td><td>${i.date}</td><td>${i.due}</td><td class="num">${peso(i.amount)}</td><td><span class="status ${statusClass(i.status)}">${i.status}</span></td>
+          <td>${i.status==="Outstanding"?`<button class="btn btn-primary" onclick="openSupplierPayment('${i.inv}')">Pay</button>`:`<button class="btn" onclick="showToast('Viewing paid invoice ${i.inv}')">View</button>`}</td></tr>`).join("")}</tbody></table>
+      </div>
+    </div>
+    <div class="card pad section-gap">
+      <div class="card-head" style="padding:0 0 14px;border:0"><h3>Supplier Payment Summary</h3></div>
+      <div class="grid" style="grid-template-columns:repeat(3,1fr)">
+        ${statBlock("Outstanding",peso(31750),"soft-yellow")}
+        ${statBlock("Paid this Month",peso(106450),"soft-green")}
+        ${statBlock("Invoices",state.supplierInvoices.length,"soft-blue")}
+      </div>
+    </div>
+  `;
+}
+function statBlock(label,value,cls){return `<div style="border:1px solid var(--line);border-radius:10px;padding:13px"><div class="icon-box ${cls}" style="width:32px;height:32px;font-size:14px">▣</div><div class="muted" style="font-size:10px;margin-top:8px">${label}</div><b style="font-size:20px">${value}</b></div>`}
+function openSupplierPayment(inv){
+  const data=state.supplierInvoices.find(i=>i.inv===inv);
+  document.getElementById("modalTitle").textContent="Record Supplier Payment";
+  document.getElementById("modalBody").innerHTML=`
+    <div class="form-grid">
+      <div class="field"><label>Invoice No.</label><div class="input" style="background:#fafbfc">${data.inv}</div></div>
+      <div class="field"><label>Supplier</label><div class="input" style="background:#fafbfc">${data.supplier}</div></div>
+      <div class="field"><label>Total Amount</label><div class="input" style="background:#fafbfc">${peso(data.amount)}</div></div>
+      <div class="field"><label>Remaining Balance</label><div class="input" style="background:#fff7f7;color:var(--red);font-weight:900">${peso(data.amount)}</div></div>
+      <div class="field"><label>Payment Method</label><select class="select"><option>Bank Transfer</option><option>Check</option><option>Cash</option></select></div>
+      <div class="field"><label>Reference No.</label><input class="input" value="BT-20261027-001"></div>
+      <div class="field"><label>Payment Date</label><input class="input" value="Oct 27, 2026"></div>
+      <div class="field"><label>Remarks</label><input class="input" placeholder="Additional notes..."></div>
+    </div>`;
+  document.getElementById("modalFoot").innerHTML=`<button class="btn" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="recordSupplierPayment('${inv}')">Record Payment</button>`;
+  document.getElementById("modalBackdrop").classList.add("show");
+}
+function recordSupplierPayment(inv){
+  const data=state.supplierInvoices.find(i=>i.inv===inv); if(!data) return;
+  data.status="Paid"; closeModal(); showToast(`Payment of ${peso(data.amount)} recorded.`); render();
+}
+
+function renderSales(){
+  const cats=["All","Chickenjoy","Burgers","Spaghetti","Sides","Drinks","Desserts"];
+  const filtered=menu.filter(m=>currentCategory==="All"||m.category===currentCategory);
+  const subtotal=cartTotal();
+  return `
+    <div class="page-head"><div><h1>Sales from Customer</h1><p>Process customer orders and record sales transactions.</p></div>
+      <div class="actions"><button class="btn" onclick="clearCart()">Clear Order</button></div>
+    </div>
+    <div class="pos-grid">
+      <div class="card pad">
+        <div style="display:flex;gap:8px;margin-bottom:12px"><input class="input" id="menuSearch" placeholder="Search menu items..."><button class="btn" onclick="showToast('Menu search ready')">⌕</button></div>
+        <div class="tabs">${cats.map(c=>`<button class="tab ${currentCategory===c?'active':''}" onclick="currentCategory='${c}';render()">${c}</button>`).join("")}</div>
+        <div class="menu-grid">${filtered.map(m=>`
+          <div class="menu-card">
+            <div class="food-lg">${m.emoji}</div>
+            <h4>${m.name}</h4><p>${m.desc}</p>
+            <div class="menu-foot"><span class="price">${peso(m.price)}</span><button class="add" onclick="addToCart(${m.id})">Add to Order</button></div>
+          </div>`).join("")}</div>
+      </div>
+
+      <div class="card pad order-card">
+        <div class="page-head" style="margin-bottom:10px"><div><h2 style="margin:0;font-size:17px">Current Order</h2><p style="font-size:10px">SO-20261027-045</p></div>
+          <select class="select" style="width:112px"><option>Dine-in</option><option>Takeout</option><option>Delivery</option></select>
+        </div>
+        <div class="order-meta">
+          <div class="meta-box"><small>Cashier</small><b>Juan Dela Cruz</b></div>
+          <div class="meta-box"><small>Date & Time</small><b>Oct 27, 2026 · 2:15 PM</b></div>
+        </div>
+        ${state.cart.length?state.cart.map(c=>`
+          <div class="order-line">
+            <div><b>${c.emoji} ${c.name}</b></div>
+            <div class="qty"><button onclick="changeQty(${c.id},-1)">−</button><span>${c.qty}</span><button onclick="changeQty(${c.id},1)">+</button></div>
+            <div class="right">${peso(c.price)}</div>
+            <div class="right">${peso(c.price*c.qty)}</div>
+          </div>`).join(""):`<div class="empty">No items in the order.</div>`}
+        <div class="summary section-gap"><div class="summary-box"><div class="sum-row"><span>Subtotal</span><b>${peso(subtotal)}</b></div><div class="sum-row"><span>VAT (12%)</span><span>${peso(subtotal*.12)}</span></div><div class="sum-row total"><span>Total</span><b>${peso(subtotal*1.12)}</b></div></div></div>
+        <button class="checkout-btn" onclick="proceedToPayment()">Proceed to Payment →</button>
+      </div>
+    </div>
+  `;
+}
+function cartTotal(){return state.cart.reduce((s,x)=>s+x.price*x.qty,0)}
+function addToCart(id){
+  const m=menu.find(x=>x.id===id); if(!m)return;
+  const e=state.cart.find(x=>x.id===id);
+  if(e)e.qty++; else state.cart.push({id:m.id,name:m.name,qty:1,price:m.price,emoji:m.emoji});
+  showToast(`${m.name} added to order`); render();
+}
+function changeQty(id,d){
+  const e=state.cart.find(x=>x.id===id); if(!e)return;
+  e.qty+=d; if(e.qty<=0) state.cart=state.cart.filter(x=>x.id!==id); render();
+}
+function clearCart(){state.cart=[];showToast("Current order cleared.");render();}
+function proceedToPayment(){if(!state.cart.length){showToast("Add an item to the order first.");return} setPage("customer-payment")}
+
+function renderCustomerPayment(){
+  const subtotal=cartTotal(), vat=subtotal*.12, total=subtotal+vat;
+  return `
+    <div class="page-head"><div><h1>Payment from Customer</h1><p>Process customer payments and complete the transaction.</p></div></div>
+    <div class="pay-grid">
+      <div class="card pad">
+        <h3 style="margin:0 0 12px;font-size:15px">Order Information</h3>
+        <div class="form-grid" style="grid-template-columns:1fr 1fr">
+          <div class="field"><label>Order No.</label><div class="input" style="background:#fafbfc">SO-20261027-045</div></div>
+          <div class="field"><label>Date & Time</label><div class="input" style="background:#fafbfc">Oct 27, 2026 · 2:15 PM</div></div>
+          <div class="field"><label>Order Type</label><div class="input" style="background:#fafbfc">Dine-in</div></div>
+          <div class="field"><label>Cashier</label><div class="input" style="background:#fafbfc">Juan Dela Cruz</div></div>
+        </div>
+        <div class="section-gap">
+          <h3 style="font-size:15px">Order Summary</h3>
+          <div class="table-wrap"><table><thead><tr><th>Item</th><th>Qty</th><th class="num">Unit Price</th><th class="num">Total</th></tr></thead>
+          <tbody>${state.cart.map(c=>`<tr><td>${c.emoji} ${c.name}</td><td>${c.qty}</td><td class="num">${peso(c.price)}</td><td class="num">${peso(c.price*c.qty)}</td></tr>`).join("")}</tbody></table></div>
+          <div class="summary section-gap"><div class="summary-box"><div class="sum-row"><span>Subtotal</span><b>${peso(subtotal)}</b></div><div class="sum-row"><span>VAT (12%)</span><span>${peso(vat)}</span></div><div class="sum-row total"><span>Total Due</span><b>${peso(total)}</b></div></div></div>
+        </div>
+      </div>
+
+      <div class="card pad">
+        <h3 style="margin:0 0 12px;font-size:15px">Customer Payment</h3>
+        <div class="payment-methods" id="paymentMethods">
+          <label class="pay-option active"><input type="radio" name="pm" value="Cash" checked> 💵 Cash</label>
+          <label class="pay-option"><input type="radio" name="pm" value="GCash"> 📱 GCash</label>
+          <label class="pay-option"><input type="radio" name="pm" value="Card"> 💳 Credit / Debit Card</label>
+          <label class="pay-option"><input type="radio" name="pm" value="Other"> ▫ Other</label>
+        </div>
+        <div class="form-grid section-gap" style="grid-template-columns:1fr 1fr">
+          <div class="field"><label>Amount Received</label><input class="input" id="amountReceived" value="${Math.ceil(total/100)*100}" type="number"></div>
+          <div class="field"><label>Change</label><div class="input" id="changeDue" style="background:#fffaf0;color:#a96c00;font-weight:900">${peso(Math.max(0,Math.ceil(total/100)*100-total))}</div></div>
+          <div class="field"><label>Reference Number</label><input class="input" id="customerRef" value="CASH-20261027-045"></div>
+          <div class="field"><label>Payment Date</label><input class="input" value="Oct 27, 2026"></div>
+          <div class="field full"><label>Notes</label><textarea class="textarea" rows="3">Payment received at Lipa Branch.</textarea></div>
+        </div>
+        <button class="checkout-btn" onclick="confirmCustomerPayment()">Confirm Payment</button>
+        <div id="paymentResult"></div>
+      </div>
+    </div>
+    <div class="card pad section-gap"><div class="card-head" style="padding:0 0 12px;border:0"><h3>Payment History</h3><button class="btn">View All</button></div>
+      <div class="table-wrap"><table><thead><tr><th>Date & Time</th><th>Order No.</th><th>Order Type</th><th>Payment Method</th><th class="num">Amount</th><th>Status</th></tr></thead><tbody>
+      ${state.payments.map(p=>`<tr><td>${p.time}</td><td>${p.order}</td><td>${p.type}</td><td>${p.method}</td><td class="num">${peso(p.amount)}</td><td><span class="status paid">${p.status}</span></td></tr>`).join("")}
+      </tbody></table></div>
+    </div>`;
+}
+function confirmCustomerPayment(){
+  const subtotal=cartTotal(), total=subtotal*1.12;
+  const amount=Number(document.getElementById("amountReceived").value)||0;
+  if(amount<total){showToast("Amount received is less than total due.");return}
+  const method=document.querySelector('input[name="pm"]:checked')?.value||"Cash";
+  const now="Oct 27, 2026 2:15 PM";
+  const so="SO-20261027-045";
+  const tx="TRX-20261027-045";
+  state.payments.unshift({time:now,order:so,type:"Dine-in",method,amount:total,status:"Paid"});
+  state.sales.unshift({so,time:now,type:"Dine-in",amount:total,status:"Completed"});
+  state.cart=[];
+  document.getElementById("paymentResult").innerHTML=`<div class="receipt-status"><div class="check">✓</div><div><b style="font-size:12px">PAYMENT COMPLETED</b><div style="font-size:10px">Transaction Reference: ${tx} • ${method}</div></div></div>
+  <div style="display:flex;gap:8px;margin-top:10px"><button class="btn" onclick="showToast('Receipt print dialog opened')">Print Receipt</button><button class="btn btn-primary" onclick="setPage('sales')">New Order</button></div>`;
+  showToast(`Payment confirmed: ${peso(total)}`);
+}
+
+function renderInventory(){
+  return `
+    <div class="page-head"><div><h1>Inventory Management</h1><p>Monitor stock levels, receive deliveries, and manage inventory items.</p></div>
+      <div class="actions">
+        <button class="btn btn-primary" onclick="openInventoryModal('add')">＋ Add Item</button>
+        <button class="btn" onclick="openInventoryModal('receive')">Receive Stock</button>
+        <button class="btn" onclick="openInventoryModal('adjust')">Adjust Stock</button>
+        <button class="btn" onclick="showToast('Inventory report generated')">Generate Report</button>
+      </div>
+    </div>
+    <div class="grid inventory-kpis">
+      ${statBlock("Total Items","125","soft-blue")}
+      ${statBlock("Low Stock","12","soft-yellow")}
+      ${statBlock("Out of Stock","3","soft-red")}
+      ${statBlock("Pending Deliveries","5","soft-green")}
+    </div>
+    <div class="card pad section-gap">
+      <div class="toolbar" style="grid-template-columns:1.4fr 1fr 1fr auto">
+        <input class="input" id="inventorySearch" placeholder="Search item name...">
+        <select class="select"><option>All Categories</option><option>Ingredient</option><option>Packaging</option><option>Beverage</option></select>
+        <select class="select"><option>All Statuses</option><option>In Stock</option><option>Low Stock</option><option>Out of Stock</option></select>
+        <button class="btn" onclick="showToast('Filters applied')">Filter</button>
+      </div>
+      <div class="table-wrap"><table><thead><tr><th>Item</th><th>Category</th><th class="num">Current Stock</th><th>Unit</th><th class="num">Reorder Level</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+      ${state.inventory.map((x,i)=>`<tr><td><b>${x.item}</b></td><td>${x.cat}</td><td class="num">${x.stock.toLocaleString()}</td><td>${x.unit}</td><td class="num">${x.reorder}</td><td><span class="status ${statusClass(x.status)}">${x.status}</span></td><td><button class="btn" onclick="openInventoryItem(${i})">View</button> <button class="btn" onclick="openInventoryModal('adjust',${i})">⋮</button></td></tr>`).join("")}
+      </tbody></table></div>
+    </div>
+    <div class="two-col section-gap">
+      <div class="card pad"><div class="card-head" style="padding:0 0 12px;border:0"><h3>Low Stock Alerts</h3><button class="btn btn-primary" onclick="setPage('ordering')">Create Purchase Order</button></div>
+        ${state.inventory.filter(x=>x.status==="Low Stock").map(x=>`<div class="alert"><div>⚠️</div><div><b>${x.item}</b><span>Current stock: ${x.stock} ${x.unit} • Reorder level: ${x.reorder} ${x.unit}</span></div><span style="margin-left:auto"><span class="status low">Low Stock</span></span></div>`).join("")}
+      </div>
+      <div class="card pad"><div class="card-head" style="padding:0 0 12px;border:0"><h3>Recent Stock Movements</h3></div>
+        ${activity("📦","soft-green","Received from San Miguel Foods","Chicken, 200kg","Today 10:24 AM")}
+        ${activity("🍔","soft-red","Sales Deduction","-50 kg Chicken","Today 9:10 AM")}
+        ${activity("📦","soft-blue","Received from Monde Nissin","500 pcs Burger Buns","Oct 25")}
+        ${activity("🥤","soft-yellow","Sales Deduction","-100 pcs Soft Drinks","Oct 25")}
+      </div>
+    </div>
+  `;
+}
+function openInventoryModal(type,index){
+  const title={add:"Add Inventory Item",receive:"Receive Stock",adjust:"Adjust Stock"}[type];
+  document.getElementById("modalTitle").textContent=title;
+  document.getElementById("modalBody").innerHTML=`
+    <div class="form-grid">
+      <div class="field"><label>Item</label><input class="input" value="${index!=null?state.inventory[index].item:""}" placeholder="e.g. Chicken"></div>
+      <div class="field"><label>Category</label><select class="select"><option>Ingredient</option><option>Packaging</option><option>Beverage</option></select></div>
+      <div class="field"><label>Quantity</label><input class="input" type="number" value="${index!=null?state.inventory[index].stock:""}"></div>
+      <div class="field"><label>Unit</label><input class="input" value="${index!=null?state.inventory[index].unit:"kg"}"></div>
+      <div class="field"><label>Reorder Level</label><input class="input" type="number" value="${index!=null?state.inventory[index].reorder:50}"></div>
+      <div class="field"><label>Reference</label><input class="input" value="SR-20261027-02"></div>
+      <div class="field full"><label>Notes</label><textarea class="textarea" rows="3">Inventory update for Lipa Branch.</textarea></div>
+    </div>`;
+  document.getElementById("modalFoot").innerHTML=`<button class="btn" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveInventoryChange('${type}',${index==null?"null":index})">Save</button>`;
+  document.getElementById("modalBackdrop").classList.add("show");
+}
+function saveInventoryChange(type,index){
+  if(type==="add") state.inventory.push({item:"New Item",cat:"Ingredient",stock:50,unit:"kg",reorder:20,status:"In Stock"});
+  else if(index!=null){ state.inventory[index].stock += type==="receive"?50:-10; state.inventory[index].status=state.inventory[index].stock<=0?"Out of Stock":state.inventory[index].stock<=state.inventory[index].reorder?"Low Stock":"In Stock"; }
+  closeModal(); showToast("Inventory updated successfully."); render();
+}
+function openInventoryItem(index){
+  const x=state.inventory[index];
+  document.getElementById("modalTitle").textContent=`${x.item} – Inventory Details`;
+  document.getElementById("modalBody").innerHTML=`<div class="grid" style="grid-template-columns:repeat(3,1fr);gap:12px">${statBlock("Current Stock",`${x.stock} ${x.unit}`,"soft-blue")}${statBlock("Reorder Level",`${x.reorder} ${x.unit}`,"soft-yellow")}${statBlock("Status",x.status,"soft-green")}</div><div class="section-gap"><div class="small-note">Category: ${x.cat}</div><div class="small-note" style="margin-top:6px">Last updated: Oct 27, 2026 • 10:24 AM</div></div>`;
+  document.getElementById("modalFoot").innerHTML=`<button class="btn" onclick="closeModal()">Close</button><button class="btn btn-primary" onclick="openInventoryModal('adjust',${index})">Adjust Stock</button>`;
+  document.getElementById("modalBackdrop").classList.add("show");
+}
+
+function renderReports(){
+  return `
+    <div class="page-head"><div><h1>Reports</h1><p>View summarized operational information for the branch.</p></div></div>
+    <div class="grid" style="grid-template-columns:repeat(3,1fr)">
+      ${reportCard("Sales Report","Daily and weekly customer sales.","₱285,450","View Sales","sales")}
+      ${reportCard("Purchasing Report","Supplier orders and invoice totals.","₱168,300","View Orders","ordering")}
+      ${reportCard("Inventory Report","Current stock and low-stock items.","125 items","View Inventory","inventory")}
+    </div>
+    <div class="card pad section-gap"><h3 style="margin-top:0">Operational Summary</h3>
+      <div class="table-wrap"><table><thead><tr><th>Module</th><th>Key Metric</th><th>Value</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Supplier Ordering</td><td>Pending Purchase Orders</td><td>3</td><td><span class="status pending">Needs Review</span></td></tr>
+        <tr><td>Supplier Payments</td><td>Outstanding Invoices</td><td>₱31,750.00</td><td><span class="status pending">Due Nov 10</span></td></tr>
+        <tr><td>Customer Sales</td><td>Today's Sales</td><td>₱285,450.00</td><td><span class="status paid">On Track</span></td></tr>
+        <tr><td>Inventory</td><td>Low Stock Items</td><td>12</td><td><span class="status low">Needs Attention</span></td></tr>
+      </tbody></table></div>
+    </div>`;
+}
+function reportCard(title,desc,value,btn,page){return `<div class="card pad"><h3 style="margin-top:0">${title}</h3><p class="muted" style="font-size:11px;min-height:34px">${desc}</p><div style="font-size:24px;font-weight:900;margin:12px 0">${value}</div><button class="btn btn-primary" onclick="setPage('${page}')">${btn} →</button></div>`}
+
+function renderSettings(){
+  return `
+    <div class="page-head"><div><h1>Settings</h1><p>Basic branch and user settings for the JBOMS prototype.</p></div></div>
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+      <div class="card pad"><h3 style="margin-top:0">Branch Information</h3>
+        <div class="form-grid" style="grid-template-columns:1fr 1fr">
+          <div class="field"><label>Branch Name</label><input class="input" value="Jollibee – Lipa Branch"></div>
+          <div class="field"><label>Branch Code</label><input class="input" value="LPA-001"></div>
+          <div class="field full"><label>Address</label><input class="input" value="Lipa City, Batangas"></div>
+          <div class="field"><label>Business Hours</label><input class="input" value="6:00 AM – 10:00 PM"></div>
+          <div class="field"><label>Timezone</label><input class="input" value="Asia/Manila"></div>
+        </div>
+        <button class="btn btn-primary section-gap" onclick="showToast('Branch information saved')">Save Changes</button>
+      </div>
+      <div class="card pad"><h3 style="margin-top:0">User Profile</h3>
+        <div class="form-grid" style="grid-template-columns:1fr 1fr">
+          <div class="field"><label>Full Name</label><input class="input" value="Juan Dela Cruz"></div>
+          <div class="field"><label>Role</label><input class="input" value="Branch Admin"></div>
+          <div class="field full"><label>Email</label><input class="input" value="juan.delacruz@jboms.local"></div>
+          <div class="field"><label>Notification Preference</label><select class="select"><option>All notifications</option><option>Important only</option></select></div>
+        </div>
+        <button class="btn btn-primary section-gap" onclick="showToast('Profile saved')">Save Profile</button>
+      </div>
+    </div>
+    <div class="card pad section-gap"><h3 style="margin-top:0">System Notes</h3><p class="muted" style="font-size:12px;line-height:1.6">This is a front-end academic prototype. Transactions are simulated in the browser and are not connected to Jollibee's production systems.</p></div>
+  `;
+}
+
+function closeModal(){document.getElementById("modalBackdrop").classList.remove("show")}
+document.getElementById("modalBackdrop").addEventListener("click",(e)=>{if(e.target.id==="modalBackdrop")closeModal()});
+
+function bindPageEvents(){
+  const s=document.getElementById("orderSearch");
+  if(s)s.addEventListener("input",()=>{const q=s.value.toLowerCase();document.querySelectorAll("#ordersTable tbody tr").forEach(r=>r.style.display=r.innerText.toLowerCase().includes(q)?"":"none")});
+  const is=document.getElementById("inventorySearch");
+  if(is)is.addEventListener("input",()=>{const q=is.value.toLowerCase();document.querySelectorAll(".table-wrap tbody tr").forEach(r=>{if(r.children.length>5)r.style.display=r.innerText.toLowerCase().includes(q)?"":"none"})});
+  document.querySelectorAll('#paymentMethods input').forEach(input=>input.addEventListener("change",e=>{
+    document.querySelectorAll(".pay-option").forEach(x=>x.classList.remove("active")); e.target.closest(".pay-option").classList.add("active");
+  }));
+  const amount=document.getElementById("amountReceived");
+  if(amount)amount.addEventListener("input",()=>{const total=cartTotal()*1.12;document.getElementById("changeDue").textContent=peso(Math.max(0,Number(amount.value)-total))});
+}
+
+render();
+</script>
+</body>
+</html>
