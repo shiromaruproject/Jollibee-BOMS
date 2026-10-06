@@ -44,6 +44,7 @@
   .system-name{font-size:12px;opacity:.88;line-height:1.35;padding:0 10px 16px}
   .nav-section{margin-top:8px}
   .nav-btn{
+    text-decoration:none;
     width:100%;border:0;background:transparent;color:#fff;padding:12px 12px;border-radius:10px;
     display:flex;align-items:center;gap:12px;text-align:left;font-size:14px;margin:3px 0;opacity:.95
   }
@@ -223,17 +224,17 @@
     <div class="system-name">Business Operations Management System</div>
 
     <div class="nav-section">
-      <button class="nav-btn active" data-page="dashboard"><span class="nav-icon">⌂</span><span>Dashboard</span></button>
-      <button class="nav-btn" data-page="ordering"><span class="nav-icon">🛒</span><span>Ordering to Supplier</span></button>
-      <button class="nav-btn" data-page="supplier-payment"><span class="nav-icon">▣</span><span>Payment to Supplier</span></button>
-      <button class="nav-btn" data-page="sales"><span class="nav-icon">🍔</span><span>Sales from Customer</span></button>
-      <button class="nav-btn" data-page="customer-payment"><span class="nav-icon">💳</span><span>Payment from Customer</span></button>
-      <button class="nav-btn" data-page="inventory"><span class="nav-icon">▧</span><span>Inventory</span></button>
+      <a class="nav-btn active" data-page="dashboard" href="#dashboard"><span class="nav-icon">⌂</span><span>Dashboard</span></a>
+      <a class="nav-btn" data-page="ordering" href="#ordering"><span class="nav-icon">🛒</span><span>Ordering to Supplier</span></a>
+      <a class="nav-btn" data-page="supplier-payment" href="#supplier-payment"><span class="nav-icon">▣</span><span>Payment to Supplier</span></a>
+      <a class="nav-btn" data-page="sales" href="#sales"><span class="nav-icon">🍔</span><span>Sales from Customer</span></a>
+      <a class="nav-btn" data-page="customer-payment" href="#customer-payment"><span class="nav-icon">💳</span><span>Payment from Customer</span></a>
+      <a class="nav-btn" data-page="inventory" href="#inventory"><span class="nav-icon">▧</span><span>Inventory</span></a>
     </div>
     <div class="nav-spacer"></div>
     <div class="nav-section">
-      <button class="nav-btn" data-page="reports"><span class="nav-icon">▥</span><span>Reports</span></button>
-      <button class="nav-btn" data-page="settings"><span class="nav-icon">⚙</span><span>Settings</span></button>
+      <a class="nav-btn" data-page="reports" href="#reports"><span class="nav-icon">▥</span><span>Reports</span></a>
+      <a class="nav-btn" data-page="settings" href="#settings"><span class="nav-icon">⚙</span><span>Settings</span></a>
     </div>
   </aside>
 
@@ -334,13 +335,28 @@ function showToast(msg){
   const el=document.getElementById("toast"); el.textContent=msg; el.classList.add("show");
   clearTimeout(window._toastTimer); window._toastTimer=setTimeout(()=>el.classList.remove("show"),2200);
 }
-function setPage(page){
+const pageIds = new Set(["dashboard","ordering","supplier-payment","sales","customer-payment","inventory","reports","settings"]);
+function pageFromHash(){
+  const page=window.location.hash.slice(1);
+  return pageIds.has(page)?page:"dashboard";
+}
+function setPage(page,updateHash=true){
+  if(!pageIds.has(page)) page="dashboard";
+  if(updateHash && window.location.hash!=="#"+page) window.location.hash=page;
   state.page=page;
-  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+  document.querySelectorAll(".nav-btn").forEach(b=>{
+    const active=b.dataset.page===page;
+    b.classList.toggle("active",active);
+    if(active) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current");
+  });
   render();
   window.scrollTo({top:0,behavior:"smooth"});
 }
-document.querySelectorAll(".nav-btn").forEach(btn=>btn.addEventListener("click",()=>setPage(btn.dataset.page)));
+document.querySelectorAll(".nav-btn").forEach(btn=>btn.addEventListener("click",event=>{
+  event.preventDefault();
+  setPage(btn.dataset.page);
+}));
+window.addEventListener("hashchange",()=>setPage(pageFromHash(),false));
 
 function render(){
   const pages={
@@ -817,6 +833,7 @@ function bindPageEvents(){
   if(amount)amount.addEventListener("input",()=>{const total=cartTotal()*1.12;document.getElementById("changeDue").textContent=peso(Math.max(0,Number(amount.value)-total))});
 }
 
+state.page=pageFromHash();
 render();
 </script>
 </body>
