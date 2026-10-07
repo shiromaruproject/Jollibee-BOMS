@@ -846,7 +846,7 @@ function bindPageEvents(){
   if(amount)amount.addEventListener("input",()=>{const total=cartTotal()*1.12;document.getElementById("changeDue").textContent=peso(Math.max(0,Number(amount.value)-total))});
 }
 
-render();
+setPage(pageFromHash(),false);
 </script>
 </body>
 </html>
