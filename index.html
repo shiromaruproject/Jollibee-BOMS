@@ -5,12 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jollibee Business Operations Management System</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
   :root{
-    --red:#d71920;
-    --red-dark:#aa0f16;
+    --red:#be0000;
+    --red-dark:#990000;
     --red-soft:#fff0f1;
     --cream:#fffaf5;
-    --bg:#f5f7fa;
+    --bg:#f4f5f7;
     --white:#ffffff;
     --ink:#17243a;
     --muted:#667085;
@@ -27,44 +29,49 @@
     --radius:14px;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}
+  html,body{margin:0;padding:0;font-family:"VAG Rounded", "Varela Round", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;background:var(--bg);color:var(--ink)}
   button,input,select,textarea{font:inherit}
   button{cursor:pointer}
   .app{display:flex;min-height:100vh}
+  
+  /* --- UPDATED SIDEBAR CSS --- */
   .sidebar{
-    width:258px;background:linear-gradient(180deg,#c90f18 0%,#990b12 100%);
-    color:#fff;padding:20px 14px 16px;position:fixed;top:0;left:0;bottom:0;z-index:10;overflow:auto
+    width:250px;background:#9E0000;
+    color:#fff;padding:25px 0 16px;position:fixed;top:0;left:0;bottom:0;z-index:10;overflow:auto
   }
-  .brand{display:flex;align-items:center;gap:11px;padding:2px 10px 24px}
-  .brand-word{font-size:29px;font-weight:900;letter-spacing:-1.5px}
-  .brand-bee{
-    width:44px;height:44px;border-radius:50%;background:#fff;color:var(--red);display:grid;place-items:center;
-    box-shadow:0 5px 15px rgba(0,0,0,.12);font-size:25px
-  }
-  .system-name{font-size:12px;opacity:.88;line-height:1.35;padding:0 10px 16px}
-  .nav-section{margin-top:8px}
+  .brand{display:flex;align-items:center;padding:0 25px 30px}
+  .brand img{width:100%;max-width:180px;height:auto;object-fit:contain}
+  .nav-section{margin-top:4px}
   .nav-btn{
-    text-decoration:none;
-    width:100%;border:0;background:transparent;color:#fff;padding:12px 12px;border-radius:10px;
-    display:flex;align-items:center;gap:12px;text-align:left;font-size:14px;margin:3px 0;opacity:.95
+    width:100%;border:0;background:transparent;color:#fff;padding:14px 30px;
+    display:flex;align-items:center;text-align:left;font-size:16px;margin:0;opacity:.9
   }
-  .nav-btn:hover{background:rgba(255,255,255,.12)}
-  .nav-btn.active{background:#fff;color:var(--red);font-weight:800;box-shadow:0 6px 14px rgba(0,0,0,.12)}
-  .nav-icon{width:20px;text-align:center;font-size:16px}
-  .nav-spacer{border-top:1px solid rgba(255,255,255,.25);margin:16px 10px 10px}
-  .main{margin-left:258px;min-width:0;flex:1}
+  .nav-btn:hover{background:rgba(255,255,255,.1);opacity:1}
+  .nav-btn.active{font-weight:bold;opacity:1}
+  .nav-spacer{border-top:1px solid #C40000;margin:15px 30px}
+  .main{margin-left:250px;min-width:0;flex:1}
+  
+  /* --- UPDATED TOPBAR CSS --- */
   .topbar{
-    height:72px;background:var(--white);border-bottom:1px solid var(--line);display:flex;align-items:center;
-    padding:0 28px;justify-content:space-between;position:sticky;top:0;z-index:8
+    height:80px;background:#C20000;border-bottom:0;display:flex;align-items:center;
+    padding:0 35px;justify-content:space-between;position:sticky;top:0;z-index:8;color:#fff
   }
-  .topbar-left{display:flex;align-items:center;gap:16px}
-  .page-brand{font-size:17px;font-weight:800}
-  .pill{background:#f3f4f6;color:#344054;border-radius:99px;padding:7px 11px;font-size:12px;font-weight:700}
-  .topbar-right{display:flex;align-items:center;gap:18px}
-  .branch{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700}
-  .avatar{width:35px;height:35px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-weight:800}
-  .user-mini{display:flex;align-items:center;gap:9px}
-  .user-mini small{display:block;color:var(--muted);font-size:10px;margin-top:1px}
+  .topbar-left{display:flex;align-items:center;gap:20px}
+  .page-brand{font-size:20px;font-weight:normal;color:#fff}
+  .pill{
+    background:#A30000;color:#fff;border-radius:99px;padding:6px 16px;font-size:14px;
+    border:1px solid rgba(255,255,255,0.15);display:inline-flex;align-items:center;gap:8px
+  }
+  .pill::after{content:"▼";font-size:10px;margin-left:4px;opacity:0.9}
+  .topbar-right{display:flex;align-items:center;gap:30px}
+  .notification{display:flex;align-items:center;gap:8px;font-size:14px;color:#fff}
+  .notification .bell{color:#FFC107;font-size:20px}
+  .user-mini{display:flex;align-items:center;gap:12px;color:#fff}
+  .avatar{width:42px;height:42px;border-radius:50%;background:#fff;color:#000;display:grid;place-items:center;font-weight:bold;font-size:16px}
+  .user-info{display:flex;flex-direction:column}
+  .user-info strong{font-size:14px;font-weight:normal}
+  .user-info small{display:block;color:rgba(255,255,255,0.9);font-size:11px;margin-top:2px;font-weight:normal}
+
   .content{padding:28px;max-width:1600px;margin:0 auto}
   .page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:20px}
   .page-head h1{margin:0 0 5px;font-size:27px;letter-spacing:-.5px}
@@ -190,6 +197,8 @@
   .toast.show{opacity:1;transform:translateY(0)}
   .small-note{font-size:10px;color:var(--muted)}
   .footer-note{margin-top:20px;font-size:10px;color:#8a94a6;text-align:center}
+
+  /* --- MOBILE RESPONSIVENESS UPDATES --- */
   @media (max-width:1200px){
     .kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
     .dashboard-lower{grid-template-columns:1fr 1fr}
@@ -198,15 +207,18 @@
     .menu-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   }
   @media (max-width:900px){
-    .sidebar{width:84px}.brand-word,.system-name,.nav-btn span:not(.nav-icon){display:none}.brand{justify-content:center;padding-inline:0}
-    .nav-btn{justify-content:center}.main{margin-left:84px}
+    .sidebar{width:84px}.page-brand,.nav-btn span{display:none}
+    .brand{justify-content:center;padding:15px 10px 30px}
+    .brand img{display:none}
+    .brand::after{content:"🐝";font-size:32px;display:block}
+    .nav-btn{justify-content:center;padding:14px 0}.main{margin-left:84px}
     .dashboard-main,.pos-grid,.pay-grid,.two-col{grid-template-columns:1fr}
     .order-card{position:static}
     .form-grid{grid-template-columns:1fr 1fr}
     .inventory-kpis{grid-template-columns:1fr 1fr}
   }
   @media (max-width:640px){
-    .topbar{padding:0 14px}.branch,.user-mini > div{display:none}.content{padding:16px}
+    .topbar{padding:0 14px}.pill,.user-mini{display:none}.content{padding:16px}
     .kpi-grid,.inventory-kpis,.dashboard-lower{grid-template-columns:1fr}
     .toolbar,.form-grid{grid-template-columns:1fr}
     .menu-grid{grid-template-columns:1fr}
@@ -218,23 +230,22 @@
 <div class="app">
   <aside class="sidebar">
     <div class="brand">
-      <div class="brand-word">Jollibee</div>
-      <div class="brand-bee">🐝</div>
+      <!-- Referencing your verbatim logo image file -->
+      <img src="image_b9fbc9.png" alt="Jollibee">
     </div>
-    <div class="system-name">Business Operations Management System</div>
 
     <div class="nav-section">
-      <a class="nav-btn active" data-page="dashboard" href="#dashboard"><span class="nav-icon">⌂</span><span>Dashboard</span></a>
-      <a class="nav-btn" data-page="ordering" href="#ordering"><span class="nav-icon">🛒</span><span>Ordering to Supplier</span></a>
-      <a class="nav-btn" data-page="supplier-payment" href="#supplier-payment"><span class="nav-icon">▣</span><span>Payment to Supplier</span></a>
-      <a class="nav-btn" data-page="sales" href="#sales"><span class="nav-icon">🍔</span><span>Sales from Customer</span></a>
-      <a class="nav-btn" data-page="customer-payment" href="#customer-payment"><span class="nav-icon">💳</span><span>Payment from Customer</span></a>
-      <a class="nav-btn" data-page="inventory" href="#inventory"><span class="nav-icon">▧</span><span>Inventory</span></a>
+      <a class="nav-btn active" data-page="dashboard" href="#dashboard"><span>Dashboard</span></a>
+      <a class="nav-btn" data-page="ordering" href="#ordering"><span>Ordering to Supplier</span></a>
+      <a class="nav-btn" data-page="supplier-payment" href="#supplier-payment"><span>Payments to Supplier</span></a>
+      <a class="nav-btn" data-page="sales" href="#sales"><span>Sales from Customer</span></a>
+      <a class="nav-btn" data-page="customer-payment" href="#customer-payment"><span>Payment from Customer</span></a>
+      <a class="nav-btn" data-page="inventory" href="#inventory"><span>Inventory</span></a>
     </div>
     <div class="nav-spacer"></div>
     <div class="nav-section">
-      <a class="nav-btn" data-page="reports" href="#reports"><span class="nav-icon">▥</span><span>Reports</span></a>
-      <a class="nav-btn" data-page="settings" href="#settings"><span class="nav-icon">⚙</span><span>Settings</span></a>
+      <a class="nav-btn" data-page="reports" href="#reports"><span>Report</span></a>
+      <a class="nav-btn" data-page="settings" href="#settings"><span>Settings</span></a>
     </div>
   </aside>
 
@@ -242,13 +253,18 @@
     <header class="topbar">
       <div class="topbar-left">
         <div class="page-brand">Business Operations Management System</div>
-        <span class="pill">Lipa Branch</span>
+        <div class="pill">Lipa Branch</div>
       </div>
       <div class="topbar-right">
-        <div class="branch">🔔 <span id="notificationText">3 notifications</span></div>
+        <div class="notification">
+          <span class="bell">🔔</span> <span id="notificationText">2 Notifications</span>
+        </div>
         <div class="user-mini">
-          <div class="avatar">JC</div>
-          <div><strong style="font-size:12px">Juan Dela Cruz</strong><small>Branch Admin</small></div>
+          <div class="avatar">EC</div>
+          <div class="user-info">
+            <strong>Ellie Chris Malabanan</strong>
+            <small>Branch Admin</small>
+          </div>
         </div>
       </div>
     </header>
@@ -335,26 +351,22 @@ function showToast(msg){
   const el=document.getElementById("toast"); el.textContent=msg; el.classList.add("show");
   clearTimeout(window._toastTimer); window._toastTimer=setTimeout(()=>el.classList.remove("show"),2200);
 }
-const pageIds = new Set(["dashboard","ordering","supplier-payment","sales","customer-payment","inventory","reports","settings"]);
-function pageFromHash(){
-  const page=window.location.hash.slice(1);
-  return pageIds.has(page)?page:"dashboard";
-}
+const pageIds=["dashboard","ordering","supplier-payment","sales","customer-payment","inventory","reports","settings"];
+function pageFromHash(){const page=decodeURIComponent(location.hash.slice(1));return pageIds.includes(page)?page:"dashboard"}
 function setPage(page,updateHash=true){
-  if(!pageIds.has(page)) page="dashboard";
-  if(updateHash && window.location.hash!=="#"+page) window.location.hash=page;
+  if(!pageIds.includes(page))page="dashboard";
   state.page=page;
+  if(updateHash&&location.hash!=="#"+page) history.pushState(null,"","#"+page);
   document.querySelectorAll(".nav-btn").forEach(b=>{
     const active=b.dataset.page===page;
     b.classList.toggle("active",active);
-    if(active) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current");
+    if(active)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");
   });
   render();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 document.querySelectorAll(".nav-btn").forEach(btn=>btn.addEventListener("click",event=>{
-  event.preventDefault();
-  setPage(btn.dataset.page);
+  event.preventDefault();setPage(btn.dataset.page);
 }));
 window.addEventListener("hashchange",()=>setPage(pageFromHash(),false));
 
@@ -377,7 +389,7 @@ function renderDashboard(){
   return `
     <div class="page-head">
       <div>
-        <h1>Good morning, Juan Dela Cruz!</h1>
+        <h1>Good morning, Ellie Chris!</h1>
         <p>Here's what's happening in your branch today. &nbsp; • &nbsp; October 27, 2026 &nbsp; • &nbsp; Lipa Branch</p>
       </div>
       <div class="actions">
@@ -395,7 +407,7 @@ function renderDashboard(){
 
     <div class="grid dashboard-main section-gap">
       <div class="card">
-        <div class="card-head"><h3>Sales Overview</h3><span class="pill">Oct 21–27, 2026</span></div>
+        <div class="card-head"><h3>Sales Overview</h3><span class="pill" style="background:#f3f4f6;color:#344054;border:1px solid var(--line)">Oct 21–27, 2026</span></div>
         <div class="card-body">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
             <span class="muted" style="font-size:11px">Daily sales</span>
@@ -441,7 +453,7 @@ function renderDashboard(){
             <div class="stock-row"><span class="dot blue"></span><span style="font-size:11px">Pending Delivery</span><strong style="margin-left:auto">5</strong></div>
           </div>
         </div>
-        <div class="alert" style="margin-top:15px"><div>⚠️</div><div><b>12 items are running low on stock.</b><span>Check inventory or create a purchase order.</span></div></div>
+        <div class="alert" style="margin-top:15px"><div>⚠️️</div><div><b>12 items are running low on stock.</b><span>Check inventory or create a purchase order.</span></div></div>
       </div></div>
 
       <div class="card"><div class="card-head"><h3>Quick Actions</h3></div><div class="card-body"><div class="quick-grid">
@@ -536,7 +548,7 @@ function viewOrder(po){
 
 function renderSupplierPayment(){
   return `
-    <div class="page-head"><div><h1>Payment to Supplier</h1><p>Review supplier invoices and record payments made to approved suppliers.</p></div></div>
+    <div class="page-head"><div><h1>Payments to Supplier</h1><p>Review supplier invoices and record payments made to approved suppliers.</p></div></div>
     <div class="card pad">
       <div class="toolbar">
         <select class="select"><option>All Invoices</option><option>Outstanding</option><option>Paid</option></select>
@@ -609,12 +621,12 @@ function renderSales(){
           <select class="select" style="width:112px"><option>Dine-in</option><option>Takeout</option><option>Delivery</option></select>
         </div>
         <div class="order-meta">
-          <div class="meta-box"><small>Cashier</small><b>Juan Dela Cruz</b></div>
+          <div class="meta-box"><small>Cashier</small><b>Ellie Chris Malabanan</b></div>
           <div class="meta-box"><small>Date & Time</small><b>Oct 27, 2026 · 2:15 PM</b></div>
         </div>
         ${state.cart.length?state.cart.map(c=>`
           <div class="order-line">
-            <div><b>${c.emoji} ${c.name}</b></div>
+            <div><b>${c.emoji}${c.name}</b></div>
             <div class="qty"><button onclick="changeQty(${c.id},-1)">−</button><span>${c.qty}</span><button onclick="changeQty(${c.id},1)">+</button></div>
             <div class="right">${peso(c.price)}</div>
             <div class="right">${peso(c.price*c.qty)}</div>
@@ -650,7 +662,7 @@ function renderCustomerPayment(){
           <div class="field"><label>Order No.</label><div class="input" style="background:#fafbfc">SO-20261027-045</div></div>
           <div class="field"><label>Date & Time</label><div class="input" style="background:#fafbfc">Oct 27, 2026 · 2:15 PM</div></div>
           <div class="field"><label>Order Type</label><div class="input" style="background:#fafbfc">Dine-in</div></div>
-          <div class="field"><label>Cashier</label><div class="input" style="background:#fafbfc">Juan Dela Cruz</div></div>
+          <div class="field"><label>Cashier</label><div class="input" style="background:#fafbfc">Ellie Chris Malabanan</div></div>
         </div>
         <div class="section-gap">
           <h3 style="font-size:15px">Order Summary</h3>
@@ -730,7 +742,7 @@ function renderInventory(){
     </div>
     <div class="two-col section-gap">
       <div class="card pad"><div class="card-head" style="padding:0 0 12px;border:0"><h3>Low Stock Alerts</h3><button class="btn btn-primary" onclick="setPage('ordering')">Create Purchase Order</button></div>
-        ${state.inventory.filter(x=>x.status==="Low Stock").map(x=>`<div class="alert"><div>⚠️</div><div><b>${x.item}</b><span>Current stock: ${x.stock} ${x.unit} • Reorder level: ${x.reorder} ${x.unit}</span></div><span style="margin-left:auto"><span class="status low">Low Stock</span></span></div>`).join("")}
+        ${state.inventory.filter(x=>x.status==="Low Stock").map(x=>`<div class="alert"><div>⚠️</div><div><b>${x.item}</b><span>Current stock: ${x.stock}${x.unit} • Reorder level: ${x.reorder}${x.unit}</span></div><span style="margin-left:auto"><span class="status low">Low Stock</span></span></div>`).join("")}
       </div>
       <div class="card pad"><div class="card-head" style="padding:0 0 12px;border:0"><h3>Recent Stock Movements</h3></div>
         ${activity("📦","soft-green","Received from San Miguel Foods","Chicken, 200kg","Today 10:24 AM")}
@@ -765,14 +777,14 @@ function saveInventoryChange(type,index){
 function openInventoryItem(index){
   const x=state.inventory[index];
   document.getElementById("modalTitle").textContent=`${x.item} – Inventory Details`;
-  document.getElementById("modalBody").innerHTML=`<div class="grid" style="grid-template-columns:repeat(3,1fr);gap:12px">${statBlock("Current Stock",`${x.stock} ${x.unit}`,"soft-blue")}${statBlock("Reorder Level",`${x.reorder} ${x.unit}`,"soft-yellow")}${statBlock("Status",x.status,"soft-green")}</div><div class="section-gap"><div class="small-note">Category: ${x.cat}</div><div class="small-note" style="margin-top:6px">Last updated: Oct 27, 2026 • 10:24 AM</div></div>`;
+  document.getElementById("modalBody").innerHTML=`<div class="grid" style="grid-template-columns:repeat(3,1fr);gap:12px">${statBlock("Current Stock",`${x.stock}${x.unit}`,"soft-blue")}${statBlock("Reorder Level",`${x.reorder}${x.unit}`,"soft-yellow")}${statBlock("Status",x.status,"soft-green")}</div><div class="section-gap"><div class="small-note">Category: ${x.cat}</div><div class="small-note" style="margin-top:6px">Last updated: Oct 27, 2026 • 10:24 AM</div></div>`;
   document.getElementById("modalFoot").innerHTML=`<button class="btn" onclick="closeModal()">Close</button><button class="btn btn-primary" onclick="openInventoryModal('adjust',${index})">Adjust Stock</button>`;
   document.getElementById("modalBackdrop").classList.add("show");
 }
 
 function renderReports(){
   return `
-    <div class="page-head"><div><h1>Reports</h1><p>View summarized operational information for the branch.</p></div></div>
+    <div class="page-head"><div><h1>Report</h1><p>View summarized operational information for the branch.</p></div></div>
     <div class="grid" style="grid-template-columns:repeat(3,1fr)">
       ${reportCard("Sales Report","Daily and weekly customer sales.","₱285,450","View Sales","sales")}
       ${reportCard("Purchasing Report","Supplier orders and invoice totals.","₱168,300","View Orders","ordering")}
@@ -782,7 +794,7 @@ function renderReports(){
       <div class="table-wrap"><table><thead><tr><th>Module</th><th>Key Metric</th><th>Value</th><th>Status</th></tr></thead>
       <tbody>
         <tr><td>Supplier Ordering</td><td>Pending Purchase Orders</td><td>3</td><td><span class="status pending">Needs Review</span></td></tr>
-        <tr><td>Supplier Payments</td><td>Outstanding Invoices</td><td>₱31,750.00</td><td><span class="status pending">Due Nov 10</span></td></tr>
+        <tr><td>Payments to Supplier</td><td>Outstanding Invoices</td><td>₱31,750.00</td><td><span class="status pending">Due Nov 10</span></td></tr>
         <tr><td>Customer Sales</td><td>Today's Sales</td><td>₱285,450.00</td><td><span class="status paid">On Track</span></td></tr>
         <tr><td>Inventory</td><td>Low Stock Items</td><td>12</td><td><span class="status low">Needs Attention</span></td></tr>
       </tbody></table></div>
@@ -797,7 +809,7 @@ function renderSettings(){
       <div class="card pad"><h3 style="margin-top:0">Branch Information</h3>
         <div class="form-grid" style="grid-template-columns:1fr 1fr">
           <div class="field"><label>Branch Name</label><input class="input" value="Jollibee – Lipa Branch"></div>
-          <div class="field"><label>Branch Code</label><input class="input" value="LPA-001"></div>
+          <div class="field"><label>BranchCode</label><input class="input" value="LPA-001"></div>
           <div class="field full"><label>Address</label><input class="input" value="Lipa City, Batangas"></div>
           <div class="field"><label>Business Hours</label><input class="input" value="6:00 AM – 10:00 PM"></div>
           <div class="field"><label>Timezone</label><input class="input" value="Asia/Manila"></div>
@@ -806,9 +818,9 @@ function renderSettings(){
       </div>
       <div class="card pad"><h3 style="margin-top:0">User Profile</h3>
         <div class="form-grid" style="grid-template-columns:1fr 1fr">
-          <div class="field"><label>Full Name</label><input class="input" value="Juan Dela Cruz"></div>
+          <div class="field"><label>Full Name</label><input class="input" value="Ellie Chris Malabanan"></div>
           <div class="field"><label>Role</label><input class="input" value="Branch Admin"></div>
-          <div class="field full"><label>Email</label><input class="input" value="juan.delacruz@jboms.local"></div>
+          <div class="field full"><label>Email</label><input class="input" value="ellie.malabanan@jboms.local"></div>
           <div class="field"><label>Notification Preference</label><select class="select"><option>All notifications</option><option>Important only</option></select></div>
         </div>
         <button class="btn btn-primary section-gap" onclick="showToast('Profile saved')">Save Profile</button>
@@ -819,6 +831,7 @@ function renderSettings(){
 }
 
 function closeModal(){document.getElementById("modalBackdrop").classList.remove("show")}
+document.getElementById("modalBackdrop").classList.remove("show"); // Ensure modal backdrop is removed
 document.getElementById("modalBackdrop").addEventListener("click",(e)=>{if(e.target.id==="modalBackdrop")closeModal()});
 
 function bindPageEvents(){
@@ -833,7 +846,7 @@ function bindPageEvents(){
   if(amount)amount.addEventListener("input",()=>{const total=cartTotal()*1.12;document.getElementById("changeDue").textContent=peso(Math.max(0,Number(amount.value)-total))});
 }
 
-setPage(pageFromHash(),false);
+render();
 </script>
 </body>
 </html>
